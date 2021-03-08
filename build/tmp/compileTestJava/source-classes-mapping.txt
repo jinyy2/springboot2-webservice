@@ -1,0 +1,2 @@
+com/jinyy2/book/springboot/HelloControllerTest.java
+ com.jinyy2.book.springboot.HelloControllerTest
