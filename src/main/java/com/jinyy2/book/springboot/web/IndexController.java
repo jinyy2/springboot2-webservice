@@ -1,5 +1,6 @@
 package com.jinyy2.book.springboot.web;
 
+import com.jinyy2.book.springboot.config.auth.LoginUser;
 import com.jinyy2.book.springboot.config.auth.dto.SessionUser;
 import com.jinyy2.book.springboot.domain.posts.PostsService;
 import com.jinyy2.book.springboot.web.dto.PostsResponseDto;
@@ -16,26 +17,26 @@ import javax.servlet.http.HttpSession;
 public class IndexController {
 
     private final PostsService postsService;
-    private final HttpSession httpSession;
+
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("posts",postsService.findAllDesc());
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
-        if(user != null){
-            model.addAttribute("userName",user.getName());
+    public String index(Model model, @LoginUser SessionUser user) {
+        model.addAttribute("posts", postsService.findAllDesc());
+        if (user != null) {
+            model.addAttribute("userName", user.getName());
         }
         return "index";
     }
+
+    @GetMapping("/posts/save")
+    public String postsSave() {
+        return "posts-save";
+    }
+
     @GetMapping("/posts/update/{id}")
     public String postsUpdate(@PathVariable Long id, Model model) {
         PostsResponseDto dto = postsService.findById(id);
         model.addAttribute("post", dto);
 
         return "posts-update";
-    }
-
-    @GetMapping("/posts/save")
-    public String postsSave() {
-        return "posts-save";
     }
 }
